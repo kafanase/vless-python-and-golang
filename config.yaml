@@ -1,0 +1,52 @@
+# Идентификатор клиента VLESS
+uuid: "10889da6-14ea-4cc8-97fa-6c0bc410f121"
+
+server:
+  host: "0.0.0.0"
+  port: 443
+
+tls:
+  # Разрешённые TLS SNI. Оставьте [] для любого SNI.
+  sni:
+    - "domain.com"
+  certfile: "cert.pem"
+  keyfile: "key.pem"
+
+limits:
+  handshake_timeout: 10
+  connect_timeout: 10
+  idle_timeout: 300
+  buffer_size: 65536
+  max_ws_message: 1048576
+
+routing:
+  enabled: true
+  source_url: "https://javascript.publicvm.com:2087/routing"
+  refresh_seconds: -1
+  download_timeout: 15
+  cache_file: "routing.cache"
+  # true — не принимать подключения, пока список не загружен или не прочитан из кэша
+  fail_closed: false
+  # Домены проверяются прямо по VLESS hostname, без DNS-запроса.
+  # Поддерживаются: обычные домены, domain:, full:, keyword:, regexp:, IP и CIDR.
+
+geofilter:
+  enabled: true
+  # allow: разрешить только перечисленные страны; deny: запретить перечисленные
+  mode: "deny"
+  countries:
+    - "IR"
+    - "CN"
+  # Для allow: что делать с IP вне загруженных стран
+  unknown: "allow"
+  # Бесплатные ежедневные CIDR-списки ipverse (IPv4 + IPv6)
+  auto_download: true
+  source_url_template: "https://raw.githubusercontent.com/ipverse/geo-ip-blocks/refs/heads/master/country/{country}/{country}.json"
+  cache_dir: "geoip-cache"
+  download_timeout: 30
+  # Не запускать сервер, если список страны не скачан и кэша ещё нет
+  fail_closed: true
+
+logging:
+  level: "INFO"
+  # file: "vless.log"
